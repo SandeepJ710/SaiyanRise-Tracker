@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Choose Your Saiyan</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #121212;
+      color: white;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      color: orange;
+      font-size: 2.5em;
+    }
+    input, button {
+      font-size: 1em;
+      padding: 10px;
+      margin: 10px;
+      border: none;
+      border-radius: 6px;
+    }
+    button {
+      background-color: orange;
+      color: black;
+      cursor: pointer;
+    }
+    select {
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Choose Your Saiyan</h1>
+
+  <div>
+    <h3>Use Existing Profile</h3>
+    <select id="existingProfiles"></select>
+    <button onclick="loadProfile()">Load</button>
+  </div>
+
+  <div>
+    <h3>Or Create New Profile</h3>
+    <input type="text" id="newProfileName" placeholder="Enter new profile name" />
+    <button onclick="createProfile()">Create & Load</button>
+  </div>
+
+  <script>
+    const profileSelect = document.getElementById("existingProfiles");
+
+    function loadProfiles() {
+      const keys = Object.keys(localStorage);
+      const profiles = new Set();
+      keys.forEach(key => {
+        if (key.startsWith("saiyanExp_")) {
+          profiles.add(key.replace("saiyanExp_", ""));
+        }
+      });
+      profileSelect.innerHTML = "";
+      profiles.forEach(profile => {
+        const option = document.createElement("option");
+        option.value = profile;
+        option.textContent = profile;
+        profileSelect.appendChild(option);
+      });
+    }
+
+    function loadProfile() {
+      const profile = profileSelect.value;
+      if (profile) {
+        localStorage.setItem("currentProfile", profile);
+        window.location.href = "home.html";
+      }
+    }
+
+    function createProfile() {
+      const newProfile = document.getElementById("newProfileName").value.trim();
+      if (newProfile !== "") {
+        localStorage.setItem("saiyanExp_" + newProfile, "0");
+        localStorage.setItem("currentProfile", newProfile);
+        window.location.href = "home.html";
+      }
+    }
+
+    window.onload = loadProfiles;
+  </script>
+</body>
+</html>
+

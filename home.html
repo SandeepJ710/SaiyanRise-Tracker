@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Saiyan Rise Tracker</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #121212;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    nav {
+      background-color: #1e1e1e;
+      padding: 10px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    nav a {
+      color: orange;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 12px;
+      border: 1px solid orange;
+      border-radius: 6px;
+    }
+    nav a:hover {
+      background-color: orange;
+      color: black;
+    }
+    h1 {
+      color: orange;
+      font-size: 2.5em;
+    }
+    .exp-bar {
+      position: relative;
+      height: 20px;
+      width: 80%;
+      margin: 40px auto 60px auto;
+      border-radius: 10px;
+      overflow: hidden;
+      background-color: #333;
+    }
+    .exp-fill {
+      height: 100%;
+      background-color: orange;
+      width: 0%;
+      transition: width 0.3s ease-in-out;
+    }
+    .milestone {
+      position: absolute;
+      height: 100%;
+      width: 1px;
+      background: #fff;
+    }
+    .milestone span {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.7em;
+      color: #000;
+      white-space: nowrap;
+    }
+    .goku-container {
+      width: 800px;
+      height: 400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #1e1e1e;
+      border-radius: 10px;
+	  box-shadow: 0 0 20px #3f51b5, 0 0 30px #3f51b5;
+    }
+    img#goku {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .quote {
+      font-style: italic;
+      margin-top: 10px;
+      font-size: 1.2em;
+      color: #ffd700;
+    }
+    .tracker {
+      background-color: #1e1e1e;
+      border: 2px solid #3f51b5;
+      border-radius: 12px;
+      padding: 15px;
+      width: 100%;
+      max-width: 300px;
+      box-shadow: 0 0 10px #3f51b5;
+      margin: 10px;
+    }
+    .trackers-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+    }
+    input, select, button {
+      margin: 5px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+    button {
+      background-color: orange;
+      color: black;
+      cursor: pointer;
+    }
+    .profile-selector {
+      margin: 10px;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="log.html">Log History</a>
+    <a href="reset.html">Reset</a>
+    <a href="index.html">Switch Profile</a>
+  </nav>
+
+  <div class="profile-selector">
+    <label for="profileSelect">Current Profile: </label>
+    <select id="profileSelect" onchange="switchProfile()"></select>
+  </div>
+
+  <h1>Saiyan Rise Tracker</h1>
+  <div class="goku-container">
+    <img id="goku" src="base.gif" alt="Goku">
+  </div>
+
+  <div class="exp-bar">
+    <div class="exp-fill" id="expFill"></div>
+    <div class="milestone" style="left: 5%"><span>Kx5</span></div>
+    <div class="milestone" style="left: 10%"><span>Kx10</span></div>
+    <div class="milestone" style="left: 20%"><span>SSJ1</span></div>
+    <div class="milestone" style="left: 30%"><span>SSJ2</span></div>
+    <div class="milestone" style="left: 40%"><span>SSJ3</span></div>
+    <div class="milestone" style="left: 50%"><span>SSJ4</span></div>
+    <div class="milestone" style="left: 60%"><span>SSG</span></div>
+    <div class="milestone" style="left: 70%"><span>SSB</span></div>
+    <div class="milestone" style="left: 75%"><span>SSB+K</span></div>
+    <div class="milestone" style="left: 80%"><span>SSBK5</span></div>
+    <div class="milestone" style="left: 85%"><span>SSBK10</span></div>
+    <div class="milestone" style="left: 90%"><span>UIS</span></div>
+    <div class="milestone" style="left: 94%"><span>UIP</span></div>
+    <div class="milestone" style="left: 97%"><span>UE</span></div>
+    <div class="milestone" style="left: 99%"><span>BG</span></div>
+    <div class="milestone" style="left: 100%"><span>LSSJ</span></div>
+    <div style="position: absolute; bottom: -20px; right: 0; font-size: 0.8em; color: #ccc;">1000 EXP</div>
+  </div>
+
+  <p>EXP: <span id="exp">0</span> | <span id="formName">Base Form</span></p>
+  <p class="quote" id="quote">"Power comes in response to a need, not a desire." – Goku</p>
+
+  <div class="trackers-container">
+    <div class="tracker">
+      <h2>Money Increase</h2>
+      <input type="text" id="moneyTaskInput" placeholder="Describe the task you completed" />
+      <input type="number" id="moneyExpInput" placeholder="Custom EXP" />
+      <button onclick="logMoneyTask()">Log Task</button>
+    </div>
+
+    <div class="tracker">
+      <h2>Gym & Diet Tracker</h2>
+      <input type="number" id="gymInput" placeholder="Weight lifted (kg)" />
+      <input type="number" id="gymExpInput" placeholder="Custom EXP (optional)" />
+      <button onclick="logGym()">Log Gym</button>
+    </div>
+
+    <div class="tracker">
+      <h2>Knowledge Tracker</h2>
+      <input type="number" id="studyInput" placeholder="Minutes studied" />
+      <select id="topic">
+        <option value="Philosophy">Philosophy</option>
+        <option value="Politics">Politics</option>
+        <option value="Economics">Economics</option>
+      </select>
+      <input type="number" id="studyExpInput" placeholder="Custom EXP (optional)" />
+      <button onclick="logStudy()">Log Study</button>
+    </div>
+  </div>
+
+  <script>
+    let exp = 0;
+    let profile = localStorage.getItem("currentProfile") || "default";
+    const expElement = document.getElementById("exp");
+    const formNameElement = document.getElementById("formName");
+    const expFill = document.getElementById("expFill");
+    const quoteElement = document.getElementById("quote");
+    const gokuImage = document.getElementById("goku");
+    const profileSelect = document.getElementById("profileSelect");
+
+    const quotes = [
+      "Power comes in response to a need, not a desire. – Goku",
+      "I do not fear this new challenge. Rather like a true warrior I will rise to meet it. – Vegeta",
+      "Push through the pain. Giving up hurts more. – Vegeta",
+      "Sometimes, we have to look beyond what we want and do what's best. – Piccolo",
+      "A warrior doesn't let fear control him. – Goku",
+      "It's not about being the best. It's about being better than you were yesterday. – Goku",
+      "Even the lowest born can rise above the gods if their will is strong enough. – Vegeta",
+      "There’s no room for mistakes. You make one... and you’re done. – Goku",
+      "Strength is the only thing that matters in this world. Everything else is just a delusion for the weak. – Vegeta"
+    ];
+
+    function getFormName(exp) {
+      if (exp < 50) return "base";
+      if (exp < 100) return "kx5";
+      if (exp < 150) return "kx10";
+      if (exp < 250) return "ssj1";
+      if (exp < 350) return "ssj2";
+      if (exp < 450) return "ssj3";
+      if (exp < 550) return "ssj4";
+      if (exp < 650) return "ssg";
+      if (exp < 700) return "ssb";
+      if (exp < 750) return "ssbk";
+      if (exp < 800) return "ssbk5";
+      if (exp < 850) return "ssbk10";
+      if (exp < 900) return "uis";
+      if (exp < 940) return "uip";
+      if (exp < 970) return "ue";
+      if (exp < 990) return "bg";
+      return "lssj";
+    }
+
+    function updateUI() {
+      expElement.textContent = exp;
+      const formName = getFormName(exp);
+      formNameElement.textContent = formName.replace(/^(.)/, m => m.toUpperCase());
+      expFill.style.width = Math.min((exp / 1000) * 100, 100) + "%";
+      gokuImage.src = formName + ".gif";
+      quoteElement.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+    }
+
+    function switchProfile() {
+      const selected = profileSelect.value;
+      localStorage.setItem("currentProfile", selected);
+      location.reload();
+    }
+
+    function populateProfileDropdown() {
+      const keys = Object.keys(localStorage);
+      const profiles = new Set();
+      keys.forEach(key => {
+        if (key.startsWith("saiyanExp_")) {
+          profiles.add(key.replace("saiyanExp_", ""));
+        }
+      });
+      profileSelect.innerHTML = "";
+      profiles.forEach(p => {
+        const option = document.createElement("option");
+        option.value = p;
+        option.textContent = p;
+        if (p === profile) option.selected = true;
+        profileSelect.appendChild(option);
+      });
+    }
+
+    function addExp(amount) {
+      exp += amount;
+      localStorage.setItem(`saiyanExp_${profile}`, exp);
+      updateUI();
+    }
+
+    function logMoneyTask() {
+      const task = document.getElementById("moneyTaskInput").value;
+      const customExp = parseInt(document.getElementById("moneyExpInput").value);
+      const earnedExp = !isNaN(customExp) ? customExp : 10;
+      if (task.trim() !== "") {
+        addExp(earnedExp);
+        const key = `moneyTasks_${profile}`;
+        const savedTasks = JSON.parse(localStorage.getItem(key) || "[]");
+        savedTasks.push({ task, exp: earnedExp, time: new Date().toISOString() });
+        localStorage.setItem(key, JSON.stringify(savedTasks));
+        document.getElementById("moneyTaskInput").value = "";
+        document.getElementById("moneyExpInput").value = "";
+      }
+    }
+
+    function logGym() {
+      const value = parseInt(document.getElementById("gymInput").value);
+      const customExp = parseInt(document.getElementById("gymExpInput").value);
+      if (!isNaN(customExp)) addExp(customExp);
+      else if (!isNaN(value)) addExp(Math.floor(value / 10));
+    }
+
+    function logStudy() {
+      const mins = parseInt(document.getElementById("studyInput").value);
+      const customExp = parseInt(document.getElementById("studyExpInput").value);
+      if (!isNaN(customExp)) addExp(customExp);
+      else if (!isNaN(mins)) addExp(Math.floor(mins / 10) * 5);
+    }
+
+    window.onload = () => {
+      populateProfileDropdown();
+      const storedExp = localStorage.getItem(`saiyanExp_${profile}`);
+      if (storedExp) {
+        exp = parseInt(storedExp);
+        updateUI();
+      }
+    };
+	
+	function getFormName(exp) {
+      if (exp < 50) return "Base Form";
+      if (exp < 100) return "Kaioken x5";
+      if (exp < 150) return "Kaioken x10";
+      if (exp < 250) return "Super Saiyan 1";
+      if (exp < 350) return "Super Saiyan 2";
+      if (exp < 450) return "Super Saiyan 3";
+      if (exp < 550) return "Super Saiyan 4";
+      if (exp < 650) return "Super Saiyan God";
+      if (exp < 700) return "Super Saiyan Blue";
+      if (exp < 750) return "SSB + Kaioken";
+      if (exp < 800) return "SSB + Kaioken x5";
+      if (exp < 850) return "SSB + Kaioken x10";
+      if (exp < 900) return "Ultra Instinct Sign";
+      if (exp < 940) return "Ultra Instinct Perfected";
+      if (exp < 970) return "Ultra Ego";
+      if (exp < 990) return "Beast Form";
+      return "Legendary Super Saiyan";
+    }
+
+    function getGifName(exp) {
+      if (exp < 50) return "base.gif";
+      if (exp < 100) return "kx5.gif";
+      if (exp < 150) return "kx10.gif";
+      if (exp < 250) return "ssj1.gif";
+      if (exp < 350) return "ssj2.gif";
+      if (exp < 450) return "ssj3.gif";
+      if (exp < 550) return "ssj4.gif";
+      if (exp < 650) return "ssg.gif";
+      if (exp < 700) return "ssb.gif";
+      if (exp < 750) return "ssbk.gif";
+      if (exp < 800) return "ssbk5.gif";
+      if (exp < 850) return "ssbk10.gif";
+      if (exp < 900) return "uis.gif";
+      if (exp < 940) return "uip.gif";
+      if (exp < 970) return "ue.gif";
+      if (exp < 990) return "bg.gif";
+      return "lssj.gif";
+    }
+
+    function updateUI() {
+      expElement.textContent = exp;
+      formNameElement.textContent = getFormName(exp);
+      expFill.style.width = Math.min((exp / 1000) * 100, 100) + "%";
+      quoteElement.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById("goku").src = getGifName(exp);
+    }
+  </script>
+</body>
+</html>

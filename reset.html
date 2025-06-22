@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reset Saiyan Data</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #121212;
+      color: white;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      color: orange;
+      font-size: 2.5em;
+    }
+    button {
+      font-size: 1em;
+      padding: 10px 20px;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    nav {
+      background-color: #1e1e1e;
+      padding: 10px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    nav a {
+      color: orange;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 12px;
+      border: 1px solid orange;
+      border-radius: 6px;
+    }
+    nav a:hover {
+      background-color: orange;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="log.html">Log History</a>
+    <a href="index.html">Switch Profile</a>
+  </nav>
+
+  <h1>Reset Your Tracker</h1>
+  <p>This will erase all EXP and task logs for your current profile.</p>
+  <button onclick="resetProfile()">RESET NOW</button>
+
+  <script>
+    function resetProfile() {
+      const profile = localStorage.getItem("currentProfile") || "default";
+      localStorage.removeItem(`saiyanExp_${profile}`);
+      localStorage.removeItem(`moneyTasks_${profile}`);
+      localStorage.removeItem(`gymTasks_${profile}`);
+      localStorage.removeItem(`studyTasks_${profile}`);
+      alert("Data cleared. Reloading...");
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>

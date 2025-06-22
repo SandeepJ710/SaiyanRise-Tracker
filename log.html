@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Log History</title>
+  <style>
+    body { background-color: #121212; color: white; font-family: 'Segoe UI'; padding: 20px; }
+    h1 { color: orange; }
+    .log-entry { background: #1e1e1e; padding: 10px; margin: 10px 0; border-left: 4px solid orange; border-radius: 5px; }
+    button { margin-top: 20px; padding: 10px; border: none; border-radius: 5px; background-color: orange; color: black; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Log History</h1>
+  <div id="logContainer"></div>
+  <button onclick="goHome()">Back to Home</button>
+
+  <script>
+    const profile = localStorage.getItem('currentProfile') || 'default';
+    const taskTypes = ['moneyTasks'];
+
+    const logContainer = document.getElementById('logContainer');
+
+    taskTypes.forEach(type => {
+      const logs = JSON.parse(localStorage.getItem(`${type}_${profile}`) || '[]');
+      logs.forEach(log => {
+        const entry = document.createElement('div');
+        entry.className = 'log-entry';
+        entry.textContent = `[${log.time}] ${log.task} - ${log.exp} EXP`;
+        logContainer.appendChild(entry);
+      });
+    });
+
+    function goHome() {
+      window.location.href = 'home.html';
+    }
+  </script>
+</body>
+</html>

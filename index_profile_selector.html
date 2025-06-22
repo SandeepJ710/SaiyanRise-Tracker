@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Select Profile - Saiyan Rise Tracker</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #121212;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: orange;
+      font-size: 2.5em;
+      margin-bottom: 30px;
+    }
+    .profile-box {
+      background-color: #1e1e1e;
+      border: 2px solid #3f51b5;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 0 auto;
+      max-width: 400px;
+      box-shadow: 0 0 10px #3f51b5;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 6px;
+      border: none;
+      margin-top: 10px;
+    }
+    button {
+      background-color: orange;
+      color: black;
+      cursor: pointer;
+    }
+    .profile-list {
+      margin-top: 20px;
+    }
+    .profile-item {
+      background-color: #333;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .profile-item:hover {
+      background-color: orange;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <h1>Select Your Saiyan Profile</h1>
+  <div class="profile-box">
+    <input type="text" id="newProfile" placeholder="Enter new profile name" />
+    <br/>
+    <button onclick="addProfile()">Create Profile</button>
+
+    <div class="profile-list" id="profileList"></div>
+  </div>
+
+  <script>
+    function addProfile() {
+      const profile = document.getElementById("newProfile").value.trim();
+      if (profile) {
+        let profiles = JSON.parse(localStorage.getItem("profiles") || "[]");
+        if (!profiles.includes(profile)) {
+          profiles.push(profile);
+          localStorage.setItem("profiles", JSON.stringify(profiles));
+        }
+        localStorage.setItem("currentProfile", profile);
+        window.location.href = "home.html";
+      }
+    }
+
+    function selectProfile(profile) {
+      localStorage.setItem("currentProfile", profile);
+      window.location.href = "home.html";
+    }
+
+    function renderProfiles() {
+      const profileList = document.getElementById("profileList");
+      const profiles = JSON.parse(localStorage.getItem("profiles") || "[]");
+      profileList.innerHTML = "<h3>Or choose existing:</h3>" +
+        profiles.map(p => `<div class='profile-item' onclick='selectProfile("${p}")'>${p}</div>`).join("");
+    }
+
+    window.onload = renderProfiles;
+  </script>
+</body>
+</html>
