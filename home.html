@@ -143,26 +143,27 @@
 
   <div class="exp-bar">
     <div class="exp-fill" id="expFill"></div>
-    <div class="milestone" style="left: 5%"><span>Kx5</span></div>
-    <div class="milestone" style="left: 10%"><span>Kx10</span></div>
-    <div class="milestone" style="left: 15%"><span>SSJ1</span></div>
+    <div class="milestone" style="left: 6.25%"><span>Kx5</span></div>
+    <div class="milestone" style="left: 12.5%"><span>Kx10</span></div>
+    <div class="milestone" style="left: 18.75%"><span>SSJ1</span></div>
     <div class="milestone" style="left: 25%"><span>SSJ2</span></div>
-    <div class="milestone" style="left: 35%"><span>SSJ3</span></div>
-    <div class="milestone" style="left: 45%"><span>SSJ4</span></div>
-    <div class="milestone" style="left: 55%"><span>SSG</span></div>
-    <div class="milestone" style="left: 65%"><span>SSB</span></div>
-    <div class="milestone" style="left: 70%"><span>SSB+K</span></div>
-    <div class="milestone" style="left: 75%"><span>SSBK5</span></div>
-    <div class="milestone" style="left: 80%"><span>SSBK10</span></div>
-    <div class="milestone" style="left: 85%"><span>UIS</span></div>
-    <div class="milestone" style="left: 88%"><span>UIP</span></div>
-    <div class="milestone" style="left: 92%"><span>UE</span></div>
-    <div class="milestone" style="left: 96%"><span>BG</span></div>
+    <div class="milestone" style="left: 31.25%"><span>SSJ3</span></div>
+    <div class="milestone" style="left: 37.5%"><span>SSJ4</span></div>
+    <div class="milestone" style="left: 43.75%"><span>SSG</span></div>
+    <div class="milestone" style="left: 50%"><span>SSB</span></div>
+    <div class="milestone" style="left: 56.25%"><span>SSB+K</span></div>
+    <div class="milestone" style="left: 62.5%"><span>SSBK5</span></div>
+    <div class="milestone" style="left: 68.75%"><span>SSBK10</span></div>
+    <div class="milestone" style="left: 75%"><span>UIS</span></div>
+    <div class="milestone" style="left: 81.25%"><span>UIP</span></div>
+    <div class="milestone" style="left: 87.5%"><span>UE</span></div>
+    <div class="milestone" style="left: 93.75%"><span>BG</span></div>
     <div class="milestone" style="left: 100%"><span>LSSJ</span></div>
     <div style="position: absolute; bottom: -20px; right: 0; font-size: 0.8em; color: #ccc;">1000 EXP</div>
   </div>
 
-  <p>EXP: <span id="exp">0</span> | <span id="formName">Base Form</span></p>
+
+  <p>EXP: <span id="exp">0</span> | Keep going Saiyan! You are now at <span id="formName">Base Form</span></p>
   <p class="quote" id="quote">"Power comes in response to a need, not a desire." – Goku</p>
 
   <div class="trackers-container">
@@ -175,7 +176,7 @@
 
     <div class="tracker">
       <h2>Gym & Diet Tracker</h2>
-      <input type="number" id="gymInput" placeholder="Weight lifted (kg)" />
+      <input type="text" id="gymInput" placeholder="Exercies Done" />
       <input type="number" id="gymExpInput" placeholder="Custom EXP (optional)" />
       <button onclick="logGym()">Log Gym</button>
     </div>
@@ -216,23 +217,14 @@
     ];
 
     function getFormName(exp) {
-      if (exp < 50) return "base";
-      if (exp < 100) return "kx5";
-      if (exp < 150) return "kx10";
-      if (exp < 250) return "ssj1";
-      if (exp < 350) return "ssj2";
-      if (exp < 450) return "ssj3";
-      if (exp < 550) return "ssj4";
-      if (exp < 650) return "ssg";
-      if (exp < 700) return "ssb";
-      if (exp < 750) return "ssbk";
-      if (exp < 800) return "ssbk5";
-      if (exp < 850) return "ssbk10";
-      if (exp < 900) return "uis";
-      if (exp < 940) return "uip";
-      if (exp < 970) return "ue";
-      if (exp < 990) return "bg";
-      return "lssj";
+      const forms = [
+        "Base Form", "Kaioken x5", "Kaioken x10", "Super Saiyan 1",
+        "Super Saiyan 2", "Super Saiyan 3", "Super Saiyan 4",
+        "Super Saiyan God", "Super Saiyan Blue", "SSB + Kaioken",
+        "SSB + Kaioken x5", "SSB + Kaioken x10", "Ultra Instinct Sign",
+        "Ultra Instinct Perfected", "Ultra Ego", "Beast Form", "Legendary Super Saiyan"
+      ];
+      return forms[Math.floor(exp / 62.5)] || forms[forms.length - 1];
     }
 
     function updateUI() {
@@ -281,11 +273,9 @@
       if (task.trim() !== "") {
         addExp(earnedExp);
         const key = `moneyTasks_${profile}`;
-        const savedTasks = JSON.parse(localStorage.getItem(key) || "[]");
+        const savedTasks = JSON.parse(localStorage.getItem(key));
         savedTasks.push({ task, exp: earnedExp, time: new Date().toISOString() });
         localStorage.setItem(key, JSON.stringify(savedTasks));
-        document.getElementById("moneyTaskInput").value = "";
-        document.getElementById("moneyExpInput").value = "";
       }
     }
 
@@ -312,45 +302,31 @@
       }
     };
 	
-	function getFormName(exp) {
-      if (exp < 50) return "Base Form";
-      if (exp < 100) return "Kaioken x5";
-      if (exp < 150) return "Kaioken x10";
-      if (exp < 250) return "Super Saiyan 1";
-      if (exp < 350) return "Super Saiyan 2";
-      if (exp < 450) return "Super Saiyan 3";
-      if (exp < 550) return "Super Saiyan 4";
-      if (exp < 650) return "Super Saiyan God";
-      if (exp < 700) return "Super Saiyan Blue";
-      if (exp < 750) return "SSB + Kaioken";
-      if (exp < 800) return "SSB + Kaioken x5";
-      if (exp < 850) return "SSB + Kaioken x10";
-      if (exp < 900) return "Ultra Instinct Sign";
-      if (exp < 940) return "Ultra Instinct Perfected";
-      if (exp < 970) return "Ultra Ego";
-      if (exp < 990) return "Beast Form";
-      return "Legendary Super Saiyan";
-    }
 
-    function getGifName(exp) {
-      if (exp < 50) return "base.gif";
-      if (exp < 100) return "kx5.gif";
-      if (exp < 150) return "kx10.gif";
-      if (exp < 250) return "ssj1.gif";
-      if (exp < 350) return "ssj2.gif";
-      if (exp < 450) return "ssj3.gif";
-      if (exp < 550) return "ssj4.gif";
-      if (exp < 650) return "ssg.gif";
-      if (exp < 700) return "ssb.gif";
-      if (exp < 750) return "ssbk.gif";
-      if (exp < 800) return "ssbk5.gif";
-      if (exp < 850) return "ssbk10.gif";
-      if (exp < 900) return "uis.gif";
-      if (exp < 940) return "uip.gif";
-      if (exp < 970) return "ue.gif";
-      if (exp < 990) return "bg.gif";
-      return "lssj.gif";
-    }
+
+function getGifName(exp) {
+  const names = [
+    "base",     // 0–49
+    "kx5",      // 50–99
+    "kx10",     // 100–149
+    "ssj1",     // 150–199
+    "ssj2",     // 200–249
+    "ssj3",     // 250–299
+    "ssj4",     // 300–349
+    "ssg",      // 350–399
+    "ssb",      // 400–449
+    "ssbk",     // 450–499
+    "ssbk5",    // 500–549
+    "ssbk10",   // 550–599
+    "uis",      // 600–649
+    "uip",      // 650–699
+    "ue",       // 700–749
+    "bg",       // 750–799
+    "lssj"      // 800+
+  ];
+  const level = Math.floor(exp / 62.5);
+  return `${names[Math.min(level, names.length - 1)]}.gif`;
+}
 
     function updateUI() {
       expElement.textContent = exp;
